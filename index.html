@@ -53,20 +53,30 @@
 	}
 	@media (orientation: landscape) {
 		body { flex-direction: row;}
-		#controls { flex-direction: column; height: 100%; width: 10%;}
+		#controls { flex-direction: column; height: 50%; width: 10%;}
 		#viz { height: 100%; width: 90%;}
 	}
-
+    div#viz {background-color:#ffff99; height:500px; width:800px; float:left;}
 	</style>
 </head>
 <body>
 	<div id="viz">
-		<canvas id="analyser" width="1024" height="500"></canvas>
-		<canvas id="wavedisplay" width="1024" height="500"></canvas>
+        <p id="note">Please use <a href="http://www.firefox.com" target="_blank">firefox</a></p>
+		<canvas id="analyser" width="512" height="100"></canvas>
+		<canvas id="wavedisplay" width="512" height="100"></canvas>
+        <p/></p>
+        <p/>you means:</p>
+        <textarea  rows="5" cols="70"> </textarea>
 	</div>
 	<div id="controls">
 		<img id="record" src="img/mic128.png" onclick="toggleRecording(this);">
-		<a id="save" href="#"><img src="img/save.svg"></a>
-	</div>
-</body>
+	 	<a id="save" href="#"><span style="visibility:hidden"/><img src="img/save.svg"></a>
+	    <form action="sample/php/sample_1.php" method="post" enctype="multipart/form-data" >
+	    <!--form action="upload_file.php" method="post" enctype="multipart/form-data" -->
+        <input type="file" name="testfile" /> 
+        <input type="submit" name="submit" value="submit" />
+        </form>
+	</div >
+
+    </body>
 </html>
