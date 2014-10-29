@@ -51,7 +51,7 @@ function init(config){
 
 function record(inputBuffer){
   recBuffersL.push(inputBuffer[0]);
-  recBuffersR.push(inputBuffer[1]);
+  //recBuffersR.push(inputBuffer[1]);
   recLength += inputBuffer[0].length;
 }
 
@@ -83,10 +83,10 @@ function downsampleBuffer(buffer, rate) {
 
 function exportWAV(type){
   var bufferL = mergeBuffers(recBuffersL, recLength);
-  var bufferR = mergeBuffers(recBuffersR, recLength);
-  var interleaved = interleave(bufferL, bufferR);
-  var downsampledBuffer = downsampleBuffer(interleaved, 16000);
-  var dataview = encodeWAV(16000, downsampledBuffer);
+  //var bufferR = mergeBuffers(recBuffersR, recLength);
+  var interleaved = interleave(bufferL);//, bufferR);
+  var downsampledBuffer = downsampleBuffer(interleaved, 8000);
+  var dataview = encodeWAV(8000, downsampledBuffer, true);
   var audioBlob = new Blob([dataview], { type: type });
   this.postMessage(audioBlob);
 }
@@ -103,7 +103,7 @@ function exportMonoWAV(type){
 function getBuffers() {
   var buffers = [];
   buffers.push( mergeBuffers(recBuffersL, recLength) );
-  buffers.push( mergeBuffers(recBuffersR, recLength) );
+  //buffers.push( mergeBuffers(recBuffersR, recLength) );
   this.postMessage(buffers);
 }
 
@@ -123,8 +123,8 @@ function mergeBuffers(recBuffers, recLength){
   return result;
 }
 
-function interleave(inputL, inputR){
-  var length = inputL.length + inputR.length;
+function interleave(inputL) {//, inputR){
+  var length = inputL.length;// + inputR.length;
   var result = new Float32Array(length);
 
   var index = 0,
@@ -132,7 +132,7 @@ function interleave(inputL, inputR){
 
   while (index < length){
     result[index++] = inputL[inputIndex];
-    result[index++] = inputR[inputIndex];
+    //result[index++] = inputR[inputIndex];
     inputIndex++;
   }
   return result;
@@ -155,6 +155,7 @@ function encodeWAV(rate, samples, mono){
   var buffer = new ArrayBuffer(44 + samples.length * 2);
   var view = new DataView(buffer);
 
+  var sampleBits = 16;
   /* RIFF identifier */
   writeString(view, 0, 'RIFF');
   /* file length */
@@ -172,11 +173,11 @@ function encodeWAV(rate, samples, mono){
   /* sample rate */
   view.setUint32(24, rate, true);
   /* byte rate (sample rate * block align) */
-  view.setUint32(28, rate * 4, true);
+  view.setUint32(28, rate * (mono?1:2) * (sampleBits/8), true);
   /* block align (channel count * bytes per sample) */
-  view.setUint16(32, 4, true);
+  view.setUint16(32, (mono?1:2) * (sampleBits/8), true);
   /* bits per sample */
-  view.setUint16(34, 16, true);
+  view.setUint16(34, sampleBits, true);
   /* data chunk identifier */
   writeString(view, 36, 'data');
   /* data chunk length */
