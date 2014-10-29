@@ -55,19 +55,46 @@ function record(inputBuffer){
   recLength += inputBuffer[0].length;
 }
 
+function downsampleBuffer(buffer, rate) {
+    if (rate == sampleRate) {
+        return buffer;
+    }
+    if (rate > sampleRate) {
+        throw "downsampling rate show be smaller than original sample rate";
+    }
+    var sampleRateRatio = sampleRate / rate;
+    var newLength = Math.round(buffer.length / sampleRateRatio);
+    var result = new Float32Array(newLength);
+    var offsetResult = 0;
+    var offsetBuffer = 0;
+    while (offsetResult < result.length) {
+        var nextOffsetBuffer = Math.round((offsetResult + 1) * sampleRateRatio);
+        var accum = 0, count = 0;
+        for (var i = offsetBuffer; i < nextOffsetBuffer && i < buffer.length; i++) {
+            accum += buffer[i];
+            count++;
+        }
+        result[offsetResult] = accum / count;
+        offsetResult++;
+        offsetBuffer = nextOffsetBuffer;
+    }
+    return result;
+}
+
 function exportWAV(type){
   var bufferL = mergeBuffers(recBuffersL, recLength);
   var bufferR = mergeBuffers(recBuffersR, recLength);
   var interleaved = interleave(bufferL, bufferR);
-  var dataview = encodeWAV(interleaved);
+  var downsampledBuffer = downsampleBuffer(interleaved, 16000);
+  var dataview = encodeWAV(16000, downsampledBuffer);
   var audioBlob = new Blob([dataview], { type: type });
-
   this.postMessage(audioBlob);
 }
 
 function exportMonoWAV(type){
   var bufferL = mergeBuffers(recBuffersL, recLength);
-  var dataview = encodeWAV(bufferL, true);
+  var downsampledBuffer = downsampleBuffer(bufferL, 8000);
+  var dataview = encodeWAV(8000, downsampledBuffer, true);
   var audioBlob = new Blob([dataview], { type: type });
 
   this.postMessage(audioBlob);
@@ -124,7 +151,7 @@ function writeString(view, offset, string){
   }
 }
 
-function encodeWAV(samples, mono){
+function encodeWAV(rate, samples, mono){
   var buffer = new ArrayBuffer(44 + samples.length * 2);
   var view = new DataView(buffer);
 
@@ -143,9 +170,9 @@ function encodeWAV(samples, mono){
   /* channel count */
   view.setUint16(22, mono?1:2, true);
   /* sample rate */
-  view.setUint32(24, sampleRate, true);
+  view.setUint32(24, rate, true);
   /* byte rate (sample rate * block align) */
-  view.setUint32(28, sampleRate * 4, true);
+  view.setUint32(28, rate * 4, true);
   /* block align (channel count * bytes per sample) */
   view.setUint16(32, 4, true);
   /* bits per sample */
