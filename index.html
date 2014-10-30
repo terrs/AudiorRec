@@ -6,6 +6,7 @@
 
 	<script src="js/audiodisplay.js"></script>
 	<script src="js/recorderjs/recorder.js"></script>
+	<script src="js/jquery-1.10.2.min.js"></script>
 	<script src="js/main.js"></script>
 	<style>
 	html { overflow: hidden; }
@@ -71,11 +72,12 @@
 	<div id="controls">
 		<img id="record" src="img/mic128.png" onclick="toggleRecording(this);">
 	 	<a id="save" href="#"><span style="visibility:hidden"/><img src="img/save.svg"></a>
-	    <form action="sample/php/sample_1.php" method="post" enctype="multipart/form-data" >
-	    <!--form action="upload_file.php" method="post" enctype="multipart/form-data" -->
+        <!--input type=button name=smt value='确定' onclick="javascript:uploadAudio();"-->
+	    <!--form action="sample/php/sample_1.php" method="post" enctype="multipart/form-data" -->
+	    <!--form action="upload_file.php" method="post" enctype="multipart/form-data" >
         <input type="file" name="testfile" /> 
         <input type="submit" name="submit" value="submit" />
-        </form>
+        </form-->
 	</div >
 
     </body>

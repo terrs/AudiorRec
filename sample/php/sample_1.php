@@ -1,12 +1,19 @@
 <?php
-echo "Upload: " . $_FILES["testfile"]["name"] . "<br />";
-echo "Type: " . $_FILES["testfile"]["type"] . "<br />";
-echo "Size: " . ($_FILES["testfile"]["size"] / 1024) . " Kb<br />";
-echo "Stored in: " . $_FILES["testfile"]["tmp_name"] . "<br />";
-move_uploaded_file($_FILES["testfile"]["tmp_name"], "/var/www/upload/" . $_FILES["testfile"]["name"]);
 
-$af = $_FILES["testfile"]["name"];
-$af = "/var/www/upload/".$af;
+if(empty($_FILES)) {
+  echo "file empty";
+}
+foreach($_FILES as $file){
+  echo "Upload: " . $file["name"] . "<br />";
+  echo "Type: " . $file["type"] . "<br />";
+  echo "Size: " . ($file["size"] / 1024) . " Kb<br />";
+  echo "Stored in: " . $file["tmp_name"];
+  move_uploaded_file($file["tmp_name"], "/var/www/upload/" . $file["name"]);
+  /*FIXME, just process the last voice*/
+  $af = $file["name"];
+  $af = "/var/www/upload/".$af;
+}
+
 echo "file: " . $af . "<br />";
 define('AUDIO_FILE', $af);
 $url = "http://vop.baidu.com/server_api";
@@ -53,8 +60,8 @@ curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 60);
-curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 120);
+curl_setopt($ch, CURLOPT_TIMEOUT, 120);
 curl_setopt($ch, CURLOPT_POSTFIELDS, $json_array);
 $response = curl_exec($ch);
 if(curl_errno($ch))

@@ -17,8 +17,8 @@ CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFT
 DEALINGS IN THE SOFTWARE.
 */
 
+  var blob = null;
 (function(window){
-
   var WORKER_PATH = 'js/recorderjs/recorderWorker.js';
 
   var Recorder = function(source, cfg){
@@ -98,7 +98,7 @@ DEALINGS IN THE SOFTWARE.
     }
 
     worker.onmessage = function(e){
-      var blob = e.data;
+      blob = e.data;
       currCallback(blob);
     }
 
@@ -111,8 +111,27 @@ DEALINGS IN THE SOFTWARE.
     var link = document.getElementById("save");
     link.href = url;
     link.download = filename || 'output.wav';
+    uploadAudio();
   }
 
   window.Recorder = Recorder;
 
 })(window);
+
+function uploadAudio(){
+  var fd = new FormData();
+  var wavName = encodeURIComponent('audio_recording_' + new Date().getTime() + '.wav');
+	console.log("wavName = " + wavName);
+	fd.append('bdata', blob, wavName);
+	console.log(blob);
+	$.ajax({
+		type: 'POST',
+		url: 'sample/php/sample_1.php',
+		data: fd,
+		processData: false,
+		contentType: false
+	}).done(function(data) {
+		console.log(data);
+		//log.innerHTML += "\n" + data;
+	});
+}
