@@ -57,7 +57,7 @@
 		#controls { flex-direction: column; height: 50%; width: 10%;}
 		#viz { height: 100%; width: 90%;}
 	}
-    div#viz {background-color:#ffff99; height:500px; width:800px; float:left;}
+    div#viz {background-color:#ffff99; height:600px; width:800px; float:left;}
 	</style>
 </head>
 <body>
@@ -67,7 +67,7 @@
 		<canvas id="wavedisplay" width="512" height="100"></canvas>
         <p/></p>
         <p/>you means:</p>
-        <textarea  rows="5" cols="70"> </textarea>
+        <textarea  id="words" rows="10" cols="75" readonly="readonly"> </textarea>
 	</div>
 	<div id="controls">
 		<img id="record" src="img/mic128.png" onclick="toggleRecording(this);">

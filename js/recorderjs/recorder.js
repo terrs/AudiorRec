@@ -132,6 +132,7 @@ function uploadAudio(){
 		contentType: false
 	}).done(function(data) {
 		console.log(data);
-		//log.innerHTML += "\n" + data;
+        var output = document.getElementById("words");
+		output.innerHTML += "\n" + data;
 	});
 }

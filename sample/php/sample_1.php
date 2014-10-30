@@ -4,17 +4,18 @@ if(empty($_FILES)) {
   echo "file empty";
 }
 foreach($_FILES as $file){
-  echo "Upload: " . $file["name"] . "<br />";
-  echo "Type: " . $file["type"] . "<br />";
-  echo "Size: " . ($file["size"] / 1024) . " Kb<br />";
-  echo "Stored in: " . $file["tmp_name"];
+  //echo "Upload: " . $file["name"] . "<br />";
+  //echo "Type: " . $file["type"] . "<br />";
+  //echo "Size: " . ($file["size"] / 1024) . " Kb<br />";
+  //echo "Stored in: " . $file["tmp_name"];
+  
   move_uploaded_file($file["tmp_name"], "/var/www/upload/" . $file["name"]);
-  /*FIXME, just process the last voice*/
+  //FIXME, just process the last voice
   $af = $file["name"];
   $af = "/var/www/upload/".$af;
 }
 
-echo "file: " . $af . "<br />";
+//echo "file: " . $af . "<br />";
 define('AUDIO_FILE', $af);
 $url = "http://vop.baidu.com/server_api";
 
