@@ -1,9 +1,11 @@
-# Audio Recorder
+# Audio speech recognition
 
-This is a code snippet/example for using RecorderJS with the web audio input feature to record audio from
-[Web Audio API](https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html).  
+This code is based  https://github.com/cwilso/AudioRecorder.git.
+New function:
+1. Uploading audio as blob to backend.
+2. Change audio format to 8K/16Bits/Mono.
+3. Speech recognition
 
-Hosted live on [Web Audio Demos](http://webaudiodemos.appspot.com/AudioRecorder/index.html).
-Check it out, feel free to fork, submit pull requests, etc.
 
--Chris
+-Haiwei
+
