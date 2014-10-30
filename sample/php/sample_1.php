@@ -32,7 +32,7 @@ curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
 $response = curl_exec($ch);
 if(curl_errno($ch))
 {
-    print curl_error($ch);
+    //print curl_error($ch);
 }
 curl_close($ch);
 $response = json_decode($response, true);
@@ -67,10 +67,10 @@ curl_setopt($ch, CURLOPT_POSTFIELDS, $json_array);
 $response = curl_exec($ch);
 if(curl_errno($ch))
 {
-    print curl_error($ch);
+    //print curl_error($ch);
 }
 curl_close($ch);
-echo $response;
+//echo $response;
 $response = json_decode($response, true);
 var_dump($response);
 
