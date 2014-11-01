@@ -72,6 +72,11 @@ if(curl_errno($ch))
 curl_close($ch);
 //echo $response;
 $response = json_decode($response, true);
-var_dump($response);
 
+if($response['err_no'] == 0) {
+	echo "result:" . $response['result'][0];
+	file_put_contents("/var/www/upload/record.log", $af . "\t" .$response['result'][0]. "\r\n", LOCK_EX | FILE_APPEND);
+} else {
+	echo "error:" . $response['err_msg'];
+}
 ?>

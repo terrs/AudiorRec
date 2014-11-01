@@ -133,6 +133,6 @@ function uploadAudio(){
 	}).done(function(data) {
 		console.log(data);
         var output = document.getElementById("words");
-		output.innerHTML += "\n" + data;
+		output.innerHTML += data + '\r\n';
 	});
 }
